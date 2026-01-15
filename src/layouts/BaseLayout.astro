@@ -6,7 +6,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "精选优质服务导航，助您找到最合适的工具和服务" } = Astro.props;
+const { title, description = "精选 claudecode 中转站，助你" } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,6 +20,8 @@ const { title, description = "精选优质服务导航，助您找到最合适�
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://claudecode-nav.vercel.app/" />
+    <meta property="og:keywords" content="claudecode, claude code, claude code 中转, claude code 中转站, claude code 中转推荐" />
     <meta property="og:type" content="website" />
     
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
