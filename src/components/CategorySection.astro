@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SiteCard from './SiteCard.astro';
+
+interface Props {
+  category: string;
+  sites: CollectionEntry<'sites'>[];
+}
+
+const { category, sites } = Astro.props;
+---
+
+<section class="category-section">
+  <div class="category-header">
+    <h2 class="category-title">{category}</h2>
+    <span class="category-count">{sites.length} 个站点</span>
+  </div>
+  
+  <div class="sites-grid">
+    {sites.map((site) => (
+      <SiteCard site={site} />
+    ))}
+  </div>
+</section>
+
+<style>
+  .category-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .category-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .category-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  .category-count {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .sites-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+  }
+</style>

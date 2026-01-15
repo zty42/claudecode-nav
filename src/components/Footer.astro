@@ -1,0 +1,39 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="copyright">
+      © {currentYear} claudecode 中转站集合. 本站包含推广链接。
+    </p>
+    <p class="disclaimer">
+      所列服务均为第三方提供，请自行评估风险后使用。
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: auto;
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-bg-card);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-inner {
+    text-align: center;
+  }
+
+  .copyright {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .disclaimer {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+  }
+</style>

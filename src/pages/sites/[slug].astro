@@ -1,0 +1,207 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const sites = await getCollection('sites');
+  return sites.map((site) => ({
+    params: { slug: site.slug },
+    props: { site },
+  }));
+}
+
+const { site } = Astro.props;
+const { title, description, affLink, logo, category, featured } = site.data;
+const { Content } = await render(site);
+---
+
+<BaseLayout title={`${title} - claudecode 中转站集合`} description={description}>
+  <Header />
+  
+  <main class="main">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">← 返回首页</a>
+      </nav>
+      
+      <article class="site-detail">
+        <header class="detail-header">
+          <div class="header-left">
+            <div class="logo-wrapper">
+              {logo ? (
+                <img src={logo} alt={`${title} logo`} class="logo" />
+              ) : (
+                <div class="logo-placeholder">
+                  {title.charAt(0)}
+                </div>
+              )}
+            </div>
+            <div class="header-info">
+              <div class="title-row">
+                <h1 class="title">{title}</h1>
+                {featured && <span class="badge badge-featured">推荐</span>}
+              </div>
+              <div class="meta">
+                <span class="category">{category}</span>
+              </div>
+              <p class="description">{description}</p>
+            </div>
+          </div>
+          <div class="header-actions">
+            <a href={affLink} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+              立即访问
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </header>
+        
+        <div class="detail-content prose">
+          <Content />
+        </div>
+        
+        <footer class="detail-footer">
+          <a href={affLink} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            立即访问 {title}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </footer>
+      </article>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .main {
+    flex: 1;
+    padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  }
+
+  .breadcrumb {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .breadcrumb a {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .site-detail {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-border-light);
+  }
+
+  .header-left {
+    display: flex;
+    gap: var(--spacing-lg);
+    flex: 1;
+  }
+
+  .logo-wrapper {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--color-bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+  }
+
+  .logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .logo-placeholder {
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .header-info {
+    flex: 1;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .meta {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .category {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    background-color: var(--color-bg-card);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .description {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .header-actions {
+    flex-shrink: 0;
+  }
+
+  .btn-lg {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
+  }
+
+  .detail-content {
+    padding: var(--spacing-xl);
+  }
+
+  .detail-footer {
+    padding: var(--spacing-xl);
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-border-light);
+    text-align: center;
+  }
+
+  .detail-footer .btn {
+    min-width: 240px;
+  }
+</style>

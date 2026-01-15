@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CategorySection from '../components/CategorySection.astro';
+
+// 获取所有站点并按 order 排序
+const allSites = await getCollection('sites');
+const sortedSites = allSites.sort((a, b) => a.data.order - b.data.order);
+
+// 按分类分组
+const sitesByCategory = sortedSites.reduce((acc, site) => {
+  const category = site.data.category;
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(site);
+  return acc;
+}, {} as Record<string, typeof sortedSites>);
+
+// 获取分类列表（按首个站点的 order 排序）
+const categories = Object.keys(sitesByCategory).sort((a, b) => {
+  const aFirstOrder = sitesByCategory[a][0]?.data.order ?? 100;
+  const bFirstOrder = sitesByCategory[b][0]?.data.order ?? 100;
+  return aFirstOrder - bFirstOrder;
+});
+---
+
+<BaseLayout title="精选优质服务推荐">
+  <Header />
+  
+  <main class="main">
+    <div class="container">
+      <section class="">
+        <p class="hero-subtitle">
+          汇集 Claude Code 中转优质资源，助您找到最合适的服务。
+        </p>
+      </section>
+      
+      <div class="categories-wrapper">
+        {categories.map((category) => (
+          <CategorySection 
+            category={category} 
+            sites={sitesByCategory[category]} 
+          />
+        ))}
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .main {
+    flex: 1;
+    padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  }
+
+  .hero {
+    text-align: center;
+    padding: var(--spacing-2xl) 0;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .hero-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .categories-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
